@@ -1,0 +1,12 @@
+RewriteEngine On
+#
+# RewriteBase indispensable sur webetu :
+# à adapter à votre identifiant ENT (ex: /www/natan-venier/deefy)
+RewriteBase /www/votre-identifiant-ent-ici/deefy
+
+#
+# Pour interdire l'accès aux répertoires contenant du code et des données sensibles
+RewriteRule ^sql(/.*|)$ - [NC,F]   # interdit l'accès à deefy/sql
+RewriteRule ^src(/.*|)$ - [NC,F]   # interdit l'accès à deefy/src
+RewriteRule ^config(/.*|)$ - [NC,F] # interdit l'accès à deefy/config
+RewriteRule \.ini$ - [NC,F]        # interdit l'accès à tous les fichiers .ini

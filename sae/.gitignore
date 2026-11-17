@@ -1,0 +1,16 @@
+# Dépendances Composer
+/vendor/
+composer.lock
+
+# Fichiers de configuration sensibles (mots de passe BD)
+*.ini
+!config/db.config.ini.dist
+
+# Fichiers systèmes et IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.tmp
+*.log
