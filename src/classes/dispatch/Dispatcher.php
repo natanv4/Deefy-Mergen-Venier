@@ -6,6 +6,7 @@ namespace iutnc\deefy\dispatch;
 
 use iutnc\deefy\action\Action;
 use iutnc\deefy\action\DefaultAction;
+use iutnc\deefy\action\AddPlaylistAction;
 
 class Dispatcher {
     protected ?string $action = null;
@@ -16,6 +17,10 @@ class Dispatcher {
 
     public function run(): void {
         switch ($this->action) {
+            case 'add-playlist':
+                $action = new AddPlaylistAction();
+                break;
+
             case 'default':
             default:
                 $action = new DefaultAction();
@@ -42,10 +47,14 @@ class Dispatcher {
             --primary-dark: #1aa34a;
             --bg-color: #121212;
             --card-bg: #1e1e1e;
+            --card-hover: #282828;
             --text-color: #ffffff;
             --text-muted: #b3b3b3;
-            --border-color: #282828;
-            --accent: #2e77d0;
+            --border-color: #333333;
+            --error-bg: #4a1515;
+            --error-border: #e74c3c;
+            --success-bg: #153b21;
+            --success-border: #2ecc71;
         }
         * {
             box-sizing: border-box;
@@ -82,6 +91,7 @@ class Dispatcher {
             display: flex;
             gap: 1.2rem;
             align-items: center;
+            flex-wrap: wrap;
         }
         nav a {
             color: var(--text-muted);
@@ -96,10 +106,11 @@ class Dispatcher {
         .current-badge {
             font-size: 0.85rem;
             background-color: var(--card-bg);
-            padding: 0.3rem 0.7rem;
+            padding: 0.3rem 0.8rem;
             border-radius: 20px;
             border: 1px solid var(--border-color);
             color: var(--primary);
+            font-weight: 600;
         }
         main {
             flex: 1;
@@ -108,12 +119,13 @@ class Dispatcher {
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
-        .welcome-box, .card {
+        .card, .welcome-box {
             background-color: var(--card-bg);
             border-radius: 8px;
             padding: 2rem;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            margin-bottom: 1.5rem;
         }
         h2 {
             font-size: 1.8rem;
@@ -122,7 +134,7 @@ class Dispatcher {
         }
         h3 {
             font-size: 1.2rem;
-            margin: 1.5rem 0 0.8rem;
+            margin: 1.2rem 0 0.6rem;
             color: var(--text-color);
         }
         p {
@@ -164,16 +176,155 @@ class Dispatcher {
         }
         .btn-primary:hover {
             background-color: var(--primary-dark);
+            color: #000000;
+        }
+        
+        /* Alertes */
+        .alert {
+            padding: 1rem 1.2rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .alert-success {
+            background-color: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: #a3e9b8;
+        }
+        .alert-error {
+            background-color: var(--error-bg);
+            border: 1px solid var(--error-border);
+            color: #f8b4b4;
+        }
+        .badge-session {
+            font-size: 0.8rem;
+            background-color: #282828;
+            color: var(--primary);
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid #3e3e3e;
+        }
+
+        /* Formulaires */
+        .form-card {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .styled-form .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .styled-form label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        .styled-form input[type="text"],
+        .styled-form input[type="number"],
+        .styled-form select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: #121212;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .styled-form input:focus,
+        .styled-form select:focus {
+            border-color: var(--primary);
+        }
+        .styled-form input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #121212;
+            color: var(--text-muted);
+            border-radius: 6px;
+            border: 1px dashed var(--border-color);
+        }
+        .styled-form .form-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Listes et pistes */
+        .audiolist-details h2 {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+        .tracks-ol {
+            list-style-position: inside;
+        }
+        .track-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #282828;
+        }
+        .track-item:last-child {
+            border-bottom: none;
         }
         .track-compact {
-            padding: 0.5rem 0;
+            display: inline-block;
+            vertical-align: middle;
+            width: 95%;
         }
         .audio-player audio {
-            margin-top: 0.4rem;
+            margin-top: 0.5rem;
             height: 32px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
         }
+        .audiolist-summary {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Grille Mes Playlists */
+        .playlists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .playlist-card {
+            background-color: #242424;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: background-color 0.2s ease, transform 0.15s ease;
+        }
+        .playlist-card:hover {
+            background-color: var(--card-hover);
+            transform: translateY(-2px);
+        }
+        .playlist-card h3 a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .playlist-card h3 a:hover {
+            color: var(--primary);
+        }
+        .playlist-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+            margin-bottom: 0;
+        }
+
         footer {
             background-color: #000000;
             color: var(--text-muted);
@@ -181,6 +332,7 @@ class Dispatcher {
             padding: 1.2rem;
             font-size: 0.85rem;
             border-top: 1px solid var(--border-color);
+            margin-top: auto;
         }
     </style>
 </head>
@@ -196,7 +348,7 @@ class Dispatcher {
 HTML;
 
         if ($playlistCouranteNom !== null) {
-            echo "<li><span class=\"current-badge\">▶ {$playlistCouranteNom}</span></li>";
+            echo "<li><a href=\"?action=display-playlist\"><span class=\"current-badge\">▶ {$playlistCouranteNom}</span></a></li>";
         }
 
         echo <<<HTML

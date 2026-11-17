@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace iutnc\deefy\repository;
 
+use iutnc\deefy\audio\lists\Playlist;
+
 class DeefyRepository {
     private \PDO $pdo;
     private static ?DeefyRepository $instance = null;
@@ -27,7 +29,7 @@ class DeefyRepository {
     public static function getInstance(): DeefyRepository {
         if (is_null(self::$instance)) {
             if (empty(self::$config)) {
-                throw new \Exception("Configuration base de données non initialisée. Appelez DeefyRepository::setConfig() au préalable.");
+                throw new \Exception("Configuration base de donnees non initialisee. Appelez DeefyRepository::setConfig() au prealable.");
             }
             self::$instance = new DeefyRepository(self::$config);
         }
@@ -59,5 +61,16 @@ class DeefyRepository {
 
     public function getPdo(): \PDO {
         return $this->pdo;
+    }
+
+    /**
+     * Sauvegarde une nouvelle playlist vide dans la table playlist (Fonctionnalite 4)
+     */
+    public function saveEmptyPlaylist(Playlist $pl): Playlist {
+        $query = "INSERT INTO playlist (nom) VALUES (:nom)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['nom' => $pl->nom]);
+        $pl->setId((int)$this->pdo->lastInsertId());
+        return $pl;
     }
 }
