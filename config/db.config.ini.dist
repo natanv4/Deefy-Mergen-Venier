@@ -1,0 +1,9 @@
+; Configuration de la base de données Deefy
+; Copiez ce fichier vers 'db.config.ini' et adaptez les valeurs à votre environnement (local ou webetu)
+
+driver = mysql
+host = localhost
+database = deefy
+username = root
+password = 
+port = 3306
