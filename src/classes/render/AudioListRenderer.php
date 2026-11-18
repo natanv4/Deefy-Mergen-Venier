@@ -9,7 +9,7 @@ use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 
 class AudioListRenderer implements Renderer {
-    protected AudioList $list;
+    protected $list;
 
     public function __construct(AudioList $list) {
         $this->list = $list;

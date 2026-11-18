@@ -9,9 +9,10 @@ use iutnc\deefy\action\DefaultAction;
 use iutnc\deefy\action\AddPlaylistAction;
 use iutnc\deefy\action\DisplayCurrentPlaylistAction;
 use iutnc\deefy\action\AddTrackAction;
+use iutnc\deefy\action\DisplayPlaylistsAction;
 
 class Dispatcher {
-    protected ?string $action = null;
+    protected $action = null;
 
     public function __construct() {
         $this->action = $_GET['action'] ?? 'default';
@@ -29,6 +30,10 @@ class Dispatcher {
 
             case 'add-track':
                 $action = new AddTrackAction();
+                break;
+
+            case 'playlist-list':
+                $action = new DisplayPlaylistsAction();
                 break;
 
             case 'default':

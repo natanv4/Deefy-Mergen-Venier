@@ -7,7 +7,7 @@ namespace iutnc\deefy\render;
 use iutnc\deefy\audio\tracks\AudioTrack;
 
 abstract class AudioTrackRenderer implements Renderer {
-    protected AudioTrack $track;
+    protected $track;
 
     public function __construct(AudioTrack $track) {
         $this->track = $track;

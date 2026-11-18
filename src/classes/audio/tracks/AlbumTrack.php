@@ -8,10 +8,10 @@ use iutnc\deefy\exception\InvalidPropertyNameException;
 use iutnc\deefy\exception\InvalidPropertyValueException;
 
 class AlbumTrack extends AudioTrack {
-    protected ?string $artiste = null;
-    protected ?string $album = null;
-    protected ?int $annee = null;
-    protected ?int $numero = null;
+    protected $artiste = null;
+    protected $album = null;
+    protected $annee = null;
+    protected $numero = null;
 
     public function __construct(string $titre, string $filename, ?string $album = null, ?int $numero = null) {
         parent::__construct($titre, $filename);
@@ -19,7 +19,7 @@ class AlbumTrack extends AudioTrack {
         $this->numero = $numero;
     }
 
-    public function __set(string $name, mixed $value): void {
+    public function __set(string $name, $value): void {
         if (!property_exists($this, $name)) {
             throw new InvalidPropertyNameException("invalid property : $name");
         }

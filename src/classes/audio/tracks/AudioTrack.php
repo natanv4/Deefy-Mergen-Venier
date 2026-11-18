@@ -9,25 +9,25 @@ use iutnc\deefy\exception\InvalidPropertyValueException;
 use iutnc\deefy\exception\NonEditablePropertyException;
 
 abstract class AudioTrack {
-    protected ?int $id = null;
-    protected string $titre;
-    protected ?string $genre = null;
-    protected int $duree = 0; // durée en secondes
-    protected string $filename;
+    protected $id = null;
+    protected $titre;
+    protected $genre = null;
+    protected $duree = 0; // durée en secondes
+    protected $filename;
 
     public function __construct(string $titre, string $filename) {
         $this->titre = $titre;
         $this->filename = $filename;
     }
 
-    public function __get(string $name): mixed {
+    public function __get(string $name) {
         if (property_exists($this, $name)) {
             return $this->$name;
         }
         throw new InvalidPropertyNameException("invalid property : $name");
     }
 
-    public function __set(string $name, mixed $value): void {
+    public function __set(string $name, $value): void {
         if (!property_exists($this, $name)) {
             throw new InvalidPropertyNameException("invalid property : $name");
         }

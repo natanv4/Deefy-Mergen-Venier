@@ -8,8 +8,8 @@ use iutnc\deefy\audio\tracks\AudioTrack;
 use iutnc\deefy\exception\InvalidPropertyNameException;
 
 class Album extends AudioList {
-    protected ?string $artiste = null;
-    protected ?string $date_sortie = null;
+    protected $artiste = null;
+    protected $date_sortie = null;
 
     /**
      * @param string $nom
@@ -27,7 +27,7 @@ class Album extends AudioList {
         $this->date_sortie = $date_sortie;
     }
 
-    public function __set(string $name, mixed $value): void {
+    public function __set(string $name, $value): void {
         if ($name === 'artiste') {
             $this->artiste = (string)$value;
             return;
