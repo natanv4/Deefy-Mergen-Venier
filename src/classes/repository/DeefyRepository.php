@@ -10,9 +10,9 @@ use iutnc\deefy\audio\tracks\AlbumTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 
 class DeefyRepository {
-    private \PDO $pdo;
-    private static ?DeefyRepository $instance = null;
-    private static array $config = [];
+    private $pdo;
+    private static $instance = null;
+    private static $config = [];
 
     private function __construct(array $conf) {
         $this->pdo = new \PDO(

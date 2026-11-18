@@ -12,7 +12,7 @@ use iutnc\deefy\action\AddTrackAction;
 use iutnc\deefy\action\DisplayPlaylistsAction;
 
 class Dispatcher {
-    protected ?string $action = null;
+    protected $action = null;
 
     public function __construct() {
         $this->action = $_GET['action'] ?? 'default';

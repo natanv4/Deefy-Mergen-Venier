@@ -9,12 +9,12 @@ use iutnc\deefy\exception\InvalidPropertyNameException;
 use iutnc\deefy\exception\NonEditablePropertyException;
 
 class AudioList {
-    protected ?int $id = null;
-    protected string $nom;
-    protected int $nb_pistes = 0;
-    protected int $duree = 0; // durée totale en secondes
+    protected $id = null;
+    protected $nom;
+    protected $nb_pistes = 0;
+    protected $duree = 0; // durée totale en secondes
     /** @var AudioTrack[] */
-    protected array $pistes = [];
+    protected $pistes = [];
 
     /**
      * @param string $nom
@@ -35,7 +35,7 @@ class AudioList {
         }
     }
 
-    public function __get(string $name): mixed {
+    public function __get(string $name) {
         if (property_exists($this, $name)) {
             return $this->$name;
         }
@@ -46,7 +46,7 @@ class AudioList {
         return property_exists($this, $name) && isset($this->$name);
     }
 
-    public function __set(string $name, mixed $value): void {
+    public function __set(string $name, $value): void {
         if ($name === 'id') {
             $this->id = (int)$value;
             return;

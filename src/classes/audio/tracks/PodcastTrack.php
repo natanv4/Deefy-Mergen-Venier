@@ -7,14 +7,14 @@ namespace iutnc\deefy\audio\tracks;
 use iutnc\deefy\exception\InvalidPropertyNameException;
 
 class PodcastTrack extends AudioTrack {
-    protected ?string $auteur = null;
-    protected ?string $date = null;
+    protected $auteur = null;
+    protected $date = null;
 
     public function __construct(string $titre, string $filename) {
         parent::__construct($titre, $filename);
     }
 
-    public function __set(string $name, mixed $value): void {
+    public function __set(string $name, $value): void {
         if (!property_exists($this, $name)) {
             throw new InvalidPropertyNameException("invalid property : $name");
         }
