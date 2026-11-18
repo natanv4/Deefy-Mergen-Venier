@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace iutnc\deefy\repository;
 
 use iutnc\deefy\audio\lists\Playlist;
+use iutnc\deefy\audio\tracks\AudioTrack;
+use iutnc\deefy\audio\tracks\AlbumTrack;
+use iutnc\deefy\audio\tracks\PodcastTrack;
 
 class DeefyRepository {
     private \PDO $pdo;
@@ -63,14 +66,53 @@ class DeefyRepository {
         return $this->pdo;
     }
 
-    /**
-     * Sauvegarde une nouvelle playlist vide dans la table playlist (Fonctionnalite 4)
-     */
     public function saveEmptyPlaylist(Playlist $pl): Playlist {
         $query = "INSERT INTO playlist (nom) VALUES (:nom)";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['nom' => $pl->nom]);
         $pl->setId((int)$this->pdo->lastInsertId());
         return $pl;
+    }
+
+    public function saveTrack(AudioTrack $track, int $playlistId): AudioTrack {
+        $query = "INSERT INTO track (titre, genre, duree, filename, artiste_auteur) 
+                  VALUES (:titre, :genre, :duree, :filename, :artiste_auteur)";
+        $stmt = $this->pdo->prepare($query);
+
+        $artisteAuteur = null;
+        if ($track instanceof AlbumTrack) {
+            $artisteAuteur = $track->artiste;
+        } elseif ($track instanceof PodcastTrack) {
+            $artisteAuteur = $track->auteur;
+        }
+
+        $stmt->execute([
+            'titre' => $track->titre,
+            'genre' => $track->genre,
+            'duree' => $track->duree,
+            'filename' => $track->filename,
+            'artiste_auteur' => $artisteAuteur
+        ]);
+
+        $trackId = (int)$this->pdo->lastInsertId();
+        $track->setId($trackId);
+
+        $qNum = "SELECT COALESCE(MAX(no_piste_dans_liste), 0) + 1 AS next_num 
+                 FROM playlist2track 
+                 WHERE playlist_id = :pl_id";
+        $stmtNum = $this->pdo->prepare($qNum);
+        $stmtNum->execute(['pl_id' => $playlistId]);
+        $nextNum = (int)$stmtNum->fetchColumn();
+
+        $qLink = "INSERT INTO playlist2track (playlist_id, track_id, no_piste_dans_liste) 
+                  VALUES (:pl_id, :tr_id, :num)";
+        $stmtLink = $this->pdo->prepare($qLink);
+        $stmtLink->execute([
+            'pl_id' => $playlistId,
+            'tr_id' => $trackId,
+            'num' => $nextNum
+        ]);
+
+        return $track;
     }
 }

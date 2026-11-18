@@ -8,6 +8,7 @@ use iutnc\deefy\action\Action;
 use iutnc\deefy\action\DefaultAction;
 use iutnc\deefy\action\AddPlaylistAction;
 use iutnc\deefy\action\DisplayCurrentPlaylistAction;
+use iutnc\deefy\action\AddTrackAction;
 
 class Dispatcher {
     protected ?string $action = null;
@@ -26,6 +27,10 @@ class Dispatcher {
                 $action = new DisplayCurrentPlaylistAction();
                 break;
 
+            case 'add-track':
+                $action = new AddTrackAction();
+                break;
+
             case 'default':
             default:
                 $action = new DefaultAction();
@@ -37,13 +42,7 @@ class Dispatcher {
     }
 
     private function renderPage(string $html): void {
-        $playlistCouranteNom = null;
-        if (isset($_SESSION['current_playlist']) && $_SESSION['current_playlist'] instanceof \iutnc\deefy\audio\lists\Playlist) {
-            $nom = $_SESSION['current_playlist']->nom ?? null;
-            if (!empty($nom)) {
-                $playlistCouranteNom = htmlspecialchars($nom, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-            }
-        }
+        $playlistCouranteNom = isset($_SESSION['current_playlist']) ? htmlspecialchars($_SESSION['current_playlist']->nom, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : null;
 
         echo <<<HTML
 <!DOCTYPE html>
